@@ -31,43 +31,95 @@
         
         header {
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
             background-color: #1b5e1b;
             color: white;
-            padding: 15px;
-            position: relative;
+            padding: 12px 15px;
+            gap: 10px;
         }
         
         .logo-container {
             display: flex;
             align-items: center;
+            min-width: 0;
+            flex: 1;
+            max-width: calc(100% - 50%)
         }
         
         .logo-container img {
-            width: 100px;
-            height: auto;
+            width: auto;
+            height: 50px;
             margin-right: 10px;
+        }
+
+        .logo-container h1 {
+            font-size: clamp(1.1rem, 4vw, 1.5rem);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* Menu Mobile */
+        .mobile-menu-btn {
+            display: block;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        nav {
+            display: none;
+            width: 100%;
+            order: 3;
+        }
+
+        nav.active {
+            display: block;
         }
         
         nav ul {
-            display: flex;
-            list-style: none;
-            padding: 0;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 10px;
         }
-        
-        nav ul li {
-            margin: 0 15px;
-        }
-        
+
         nav ul li a {
-            color: white;
-            text-decoration: none;
-            transition: color 0.3s;
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.1);
+            display: block;
+            border-radius: 4px;
         }
-        
-        nav ul li a:hover {
-            color: #a8e6cf;
+
+        /* Desktop (769px+) */
+        @media (min-width: 769px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+            
+            nav {
+                display: block;
+                width: auto;
+                order: initial;
+            }
+            
+            nav ul {
+                flex-direction: row;
+                margin: 0;
+                gap: 15px;
+            }
+            
+            nav ul li a {
+                padding: 5px 10px;
+                background: transparent;
+            }
+            
+            .logo-container {
+                max-width: none;
+            }
         }
         
         section {
@@ -156,18 +208,23 @@
 <body>
     <header>
         <div class="logo-container">
-            <img src="image/logo.png" alt="Logo Albert Einstein" class="logo">
+            <a href="index.html"></a><img src="image/logo.png" alt="Logo Albert Einstein" class="logo">
             <h1>Albert Einstein</h1>
         </div>
-        <nav>
+
+        <div class="header-buttons">
+            <button  id="toggle-dark-mode" class="dark-mode-btn">🌓</button>
+            <button class="mobile-menu-btn">☰</button>
+        </div>
+        
+        <nav id="main-nav">
             <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#cursos">Nossos Cursos</a></li>
-                <li><a href="#sobre">Sobre Nós</a></li>
+                <li><a href="index.html#home">Home</a></li>
+                <li><a href="index.html#cursos">Nossos Cursos</a></li>
+                <li><a href="index.html#sobre">Sobre Nós</a></li>
                 <li><a href="login.html">Área do Aluno</a></li>
             </ul>
         </nav>
-        <button id="toggle-dark-mode" class="dark-mode-btn">🌓</button>
     </header>
 
     <section id="home">
@@ -262,6 +319,25 @@
                 setTimeout(type, 100);
             }
         })();
+
+        // Menu Mobile
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const mainNav = document.getElementById('main-nav');
+        
+        if(mobileMenuBtn && mainNav) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mainNav.classList.toggle('active');
+            });
+            
+            // Fechar menu ao clicar em links
+            document.querySelectorAll('#main-nav a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if(window.innerWidth <= 768) {
+                        mainNav.classList.remove('active');
+                    }
+                });
+            });
+        }
         
         // Interatividade dos cursos
         document.querySelectorAll('.ver-mais').forEach(btn => {

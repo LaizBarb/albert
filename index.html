@@ -38,6 +38,7 @@
             color: white;
             padding: 12px 15px;
             gap: 10px;
+            position: relative;
         }
         
         .logo-container {
@@ -45,7 +46,7 @@
             align-items: center;
             min-width: 0;
             flex: 1;
-            max-width: calc(100% - 50%)
+            max-width: calc(100% - 100%)
         }
         
         .logo-container img {
@@ -59,6 +60,8 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            margin: 0;
+            line-height: 1.2;
         }
         
         /* Menu Mobile */
@@ -69,12 +72,14 @@
             color: white;
             font-size: 1.8rem;
             cursor: pointer;
+            padding: 5px;
         }
 
         nav {
             display: none;
             width: 100%;
             order: 3;
+            margin-top: 10px;
         }
 
         nav.active {
@@ -82,18 +87,29 @@
         }
         
         nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 8px;
             margin-top: 10px;
         }
 
         nav ul li a {
+            color: white;
+            text-decoration: none;
             padding: 8px 12px;
             background: rgba(255,255,255,0.1);
             display: block;
             border-radius: 4px;
+            transition: background-color 0.3s;
         }
 
+        nav ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
         /* Desktop (769px+) */
         @media (min-width: 769px) {
             .mobile-menu-btn {
@@ -104,6 +120,7 @@
                 display: block;
                 width: auto;
                 order: initial;
+                margin-top: 0;
             }
             
             nav ul {
@@ -182,9 +199,11 @@
             background: none;
             border: none;
             color: white;
-            font-size: 20px;
+            font-size: 1.5rem;
             cursor: pointer;
             margin-left: 15px;
+            padding: 5px;
+            order: 1;
         }
         
         footer {

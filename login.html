@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Aluno</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        
+        body.dark-mode header {
+            background-color: #0d3b0d;
+        }
+        
+        body.dark-mode .login-container {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+        }
+        
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #1b5e1b;
+            color: white;
+            padding: 15px;
+            position: relative;
+        }
+        
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #388e3c;
+        }
+        
+        button.loading {
+            position: relative;
+        }
+        
+        button.loading::after {
+            content: "";
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: translateY(-50%) rotate(360deg); }
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-container img {
+            width: 100px;
+            height: auto;
+            margin-right: 10px;
+        }
+        
+        .logo {
+            width: 100px;
+            height: auto;
+            margin-right: 10px;
+        }
+        
+        .login-container {
+            width: 350px;
+            margin: 100px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .login-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        
+        input {
+            display: block;
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            border-color: #4caf50;
+            outline: none;
+        }
+        
+        input.invalid {
+            border-color: #f44336;
+        }
+        
+        #loginMessage {
+            min-height: 20px;
+            color: #f44336;
+            margin-top: 10px;
+        }
+        
+        .dark-mode-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <a href="index.html"><img src="image/logo.png" alt="Logo Albert Einstein" class="logo"></a>
+            <h1>Albert Einstein</h1>
+        </div>
+        <button id="toggle-dark-mode" class="dark-mode-btn">🌓</button>
+    </header>
+
+    <div class="login-container">
+        <h2>Área do Aluno</h2>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Usuário" required>
+            <input type="password" id="password" placeholder="Senha" required>
+            <button type="submit" id="loginBtn">Entrar</button>
+        </form>
+        <p id="loginMessage"></p>
+    </div>
+
+    <script>
+        const alunos = {
+            "lucas": { senha: "1234", nome: "Lucas Silva", cursos: ["Técnico em Informática"] },
+            "marcos": { senha: "5678", nome: "Marcos Vinicius", cursos: ["Técnico em Informática"] }
+        };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const loginForm = document.getElementById("loginForm");
+            const loginBtn = document.getElementById("loginBtn");
+
+            // Validação em tempo real
+            document.getElementById("username").addEventListener("input", function() {
+                this.classList.toggle("invalid", this.value.length > 0 && !alunos[this.value]);
+            });
+
+            if (loginForm) {
+                loginForm.addEventListener("submit", (event) => {
+                    event.preventDefault();
+                    const username = document.getElementById("username").value;
+                    const password = document.getElementById("password").value;
+
+                    // Mostrar loading
+                    loginBtn.classList.add("loading");
+                    loginBtn.disabled = true;
+
+                    // Simular tempo de verificação
+                    setTimeout(() => {
+                        if (alunos[username] && alunos[username].senha === password) {
+                            localStorage.setItem("alunoLogado", username);
+                            window.location.href = "dashboard.html";
+                        } else {
+                            document.getElementById("loginMessage").textContent = "Usuário ou senha incorretos.";
+                            document.getElementById("username").classList.add("invalid");
+                            document.getElementById("password").classList.add("invalid");
+                        }
+                        loginBtn.classList.remove("loading");
+                        loginBtn.disabled = false;
+                    }, 1000);
+                });
+            }
+            
+            // Dark mode toggle
+            document.getElementById("toggle-dark-mode").addEventListener("click", function() {
+                document.body.classList.toggle("dark-mode");
+                localStorage.setItem("darkMode", document.body.classList.contains("dark-mode"));
+            });
+            
+            // Verificar preferência salva
+            if(localStorage.getItem("darkMode") === "true") {
+                document.body.classList.add("dark-mode");
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem("alunoLogado");
+            window.location.href = "login.html";
+        }
+    </script>
+</body>
+</html>

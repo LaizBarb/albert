@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Técnico em Informática</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        
+        body.dark-mode header {
+            background-color: #0d3b0d;
+        }
+        
+        body.dark-mode .curso-container {
+            background-color: #1e1e1e;
+        }
+        
+        body.dark-mode .cadastro-pagamento {
+            background-color: #2d2d2d;
+        }
+        
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #1b5e1b;
+            color: white;
+            padding: 15px;
+            position: relative;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-container img {
+            width: 100px;
+            height: auto;
+            margin-right: 10px;
+        }
+        
+        .logo {
+            width: 100px;
+            height: auto;
+            margin-right: 10px;
+        }
+        
+        section {
+            text-align: center;
+        }
+        
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        ul li {
+            display: block;
+            margin: 0 15px;
+        }
+        
+        .curso-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            transition: transform 0.3s;
+        }
+        
+        .curso-container:hover {
+            transform: translateY(-5px);
+        }
+        
+        h2, h3 {
+            color: #1b5e20;
+        }
+        
+        .cadastro-pagamento {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        form input, form select, form button {
+            width: 95%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+        
+        form input:focus, form select:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        
+        form input.invalid {
+            border-color: #f44336;
+        }
+        
+        form button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        form button:hover {
+            background-color: #388E3C;
+        }
+        
+        form button.loading {
+            position: relative;
+        }
+        
+        form button.loading::after {
+            content: "";
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: translateY(-50%) rotate(360deg); }
+        }
+        
+        .dark-mode-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-conteudo {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 500px;
+            position: relative;
+        }
+        
+        .fechar-modal {
+            position: absolute;
+            right: 15px;
+            top: 5px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        body.dark-mode .modal-conteudo {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <a href="index.html"><img src="image/logo.png" alt="Logo Albert Einstein" class="logo"></a>
+            <h1>Técnico em Informática</h1>
+        </div>
+        <button id="toggle-dark-mode" class="dark-mode-btn">🌓</button>
+    </header>
+    
+    <section class="curso-container">
+        <div class="curso-info">
+            <h2>Curso de Informática</h2>
+            <p>O curso Técnico em Informática forma profissionais preparados para atuar no desenvolvimento de sistemas, manutenção de computadores, redes e suporte técnico. Com foco em tecnologia e inovação, o aluno aprende a lidar com hardware, software e programação, tornando-se apto para o mercado de TI em constante crescimento.
+            </p>
+            <h3>Duração: 15 meses</h3>
+            <h3>Investimento: <span id="preco">R$ 100,00</span></h3>
+            <label for="horario">Escolha o horário:</label>
+            <select id="horario" onchange="atualizarPreco()">
+                <option value="manha">Manhã - R$ 100,00</option>
+                <option value="tarde">Tarde - R$ 130,00</option>
+                <option value="noite">Noite - R$ 150,00</option>
+            </select>
+        </div>
+
+        <div class="instituicoes">
+            <h2>Instituições Disponíveis</h2>
+            <ul>
+                <li><a href="https://maps.app.goo.gl/pe8wD5qwJ8YoTA5S8">Unidade Augusto Montenegro Negro</a></li>
+             <li><a href="https://maps.app.goo.gl/1ushQa4NeTn7guiCA">Belém pedreira</a></li>
+             <li><a href="https://maps.app.goo.gl/aqbCvwNhwNpx9vag9">Unidade Marituba</a></li>
+            </ul>
+        </div>
+
+        <div class="beneficios">
+            <h2>Por que escolher este curso?</h2>
+            <ul>
+                <li>Professores qualificados e experientes</li>
+                <li>Laboratórios equipados com tecnologia</li>
+                <li>Oportunidades de estágio e emprego</li>
+                <li>Certificação</li>
+            </ul>
+        </div>
+
+        <div class="cadastro-pagamento">
+            <h2>Cadastro e Pagamento</h2>
+            <p>Garanta sua vaga preenchendo o formulário abaixo e escolhendo a forma de pagamento:</p>
+            <form id="inscricaoForm">
+                <input type="text" id="nome" placeholder="Nome Completo" required>
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="tel" id="telefone" placeholder="Telefone" required>
+                <label for="pagamento">Forma de Pagamento:</label>
+                <select id="pagamento" required>
+                    <option value="cartao">Cartão de Crédito</option>
+                    <option value="boleto">Boleto Bancário</option>
+                    <option value="pix">PIX</option>
+                </select>
+                <button type="submit" id="submitBtn">Confirmar Inscrição</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-conteudo">
+            <span class="fechar-modal">&times;</span>
+            <div id="modal-mensagem"></div>
+        </div>
+    </div>
+
+    <script>
+        function atualizarPreco() {
+            const horarios = { manha: 100, tarde: 130, noite: 150 };
+            const horarioSelecionado = document.getElementById("horario").value;
+            document.getElementById("preco").innerText = "R$ " + horarios[horarioSelecionado] + ",00";
+        }
+        
+        // Validação em tempo real
+        document.getElementById("email").addEventListener("input", function() {
+            this.classList.toggle("invalid", this.value.length > 0 && !this.validity.valid);
+        });
+        
+        document.getElementById("telefone").addEventListener("input", function() {
+            this.classList.toggle("invalid", this.value.length > 0 && this.value.length < 10);
+        });
+        
+        // Form submission
+        document.getElementById("inscricaoForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const submitBtn = document.getElementById("submitBtn");
+            
+            // Mostrar loading
+            submitBtn.classList.add("loading");
+            submitBtn.disabled = true;
+            
+            // Simular envio
+            setTimeout(() => {
+                submitBtn.classList.remove("loading");
+                submitBtn.disabled = false;
+                
+                // Mostrar modal de confirmação
+                document.getElementById("modal-mensagem").innerHTML = `
+                    <h3>Inscrição realizada com sucesso!</h3>
+                    <p>Detalhes da sua inscrição:</p>
+                    <p><strong>Curso:</strong> Técnico em Informática</p>
+                    <p><strong>Horário:</strong> ${document.getElementById("horario").options[document.getElementById("horario").selectedIndex].text}</p>
+                    <p><strong>Valor:</strong> ${document.getElementById("preco").innerText}</p>
+                    <p>Em breve enviaremos mais informações para o email cadastrado.</p>
+                `;
+                document.getElementById("modal").style.display = "block";
+                
+                // Limpar formulário
+                this.reset();
+            }, 1500);
+        });
+        
+        // Fechar modal
+        document.querySelector(".fechar-modal").addEventListener("click", function() {
+            document.getElementById("modal").style.display = "none";
+        });
+        
+        window.addEventListener("click", function(e) {
+            if(e.target === document.getElementById("modal")) {
+                document.getElementById("modal").style.display = "none";
+            }
+        });
+        
+        // Dark mode toggle
+        document.getElementById("toggle-dark-mode").addEventListener("click", function() {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("darkMode", document.body.classList.contains("dark-mode"));
+        });
+        
+        // Verificar preferência salva
+        if(localStorage.getItem("darkMode") === "true") {
+            document.body.classList.add("dark-mode");
+        }
+    </script>
+</body>
+</html>
